@@ -151,14 +151,27 @@ export function useRemoveAdmin(): UseMutationResult<void, Error, { discordId: st
   });
 }
 
-export function useClaimCode(): UseMutationResult<ClaimResult, Error, { data: { code: string; discordId?: string } }> {
+import { useMutation } from '@tanstack/react-query';
+
+const API_BASE = (import.meta as any).env?.VITE_BOT_API_URL || 'http://slu1.heavencloud.in:2601';
+
+export function useClaimCode() {
   return useMutation({
-    mutationFn: async ({ data }) => {
-      const match = MOCK_CODES.find((c) => c.code.toLowerCase() === data.code.toLowerCase() && !c.claimed);
-      if (!match) {
-        throw new Error("Invalid or already claimed code.");
-      }
-      return { categoryName: match.categoryName, code: match.code };
-    },
-  });
-}
+      mutationFn: async ({ data }: { data: { code: string; discordId?: string } }) => {
+            const res = await fetch(`${API_BASE}/api/claim`, {
+                    method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ code: data.code, discordId: data.discordId }),
+                                          });
+
+                                                const json = await res.json();
+
+                                                      if (!res.ok) {
+                                                              throw new Error(json.error || 'Invalid or already claimed code.');
+                                                                    }
+
+                                                                          return json as { categoryName: string; code: string };
+                                                                              },
+                                                                                });
+                                                                                }
+
