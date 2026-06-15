@@ -56,7 +56,7 @@ const MOCK_CODES: Code[] = [
 ];
 
 const MOCK_ADMINS: Admin[] = [
-  { id: 1, discordId: "123456789012345678", username: "owner", addedAt: new Date().toISOString() },
+  { id: 1, discordId: "1231538210140721183", username: "pacifictheog", addedAt: new Date().toISOString() },
 ];
 
 // ---- Query key helpers (kept for parity with the original API) ----
