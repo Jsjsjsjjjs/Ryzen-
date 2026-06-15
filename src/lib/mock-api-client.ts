@@ -158,10 +158,13 @@ const API_BASE = (import.meta as any).env?.VITE_BOT_API_URL || 'http://slu1.heav
 export function useClaimCode() {
   return useMutation({
       mutationFn: async ({ data }: { data: { code: string; discordId?: string } }) => {
-            const res = await fetch(`${API_BASE}/api/claim`, {
-                    method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ code: data.code, discordId: data.discordId }),
+                  // Pura lamba URL hatakar direct proxy path use karenge
+      const res = await fetch('/api/claim', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: data.code, discordId: data.discordId }),
+      });
+      }),
                                           });
 
                                                 const json = await res.json();
