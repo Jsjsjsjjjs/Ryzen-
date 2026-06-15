@@ -151,30 +151,26 @@ export function useRemoveAdmin(): UseMutationResult<void, Error, { discordId: st
   });
 }
 
-import { useMutation } from '@tanstack/react-query';
-
-const API_BASE = (import.meta as any).env?.VITE_BOT_API_URL || 'http://slu1.heavencloud.in:2601';
+// ---- ASLI CLAIM LOGIC (FIXED BRACKETS) ----
 
 export function useClaimCode() {
   return useMutation({
-      mutationFn: async ({ data }: { data: { code: string; discordId?: string } }) => {
-                  // Pura lamba URL hatakar direct proxy path use karenge
+    mutationFn: async ({ data }: { data: { code: string; discordId?: string } }) => {
+      // Vercel proxy rewrite use karega browser mix-content block hatane ke liye
       const res = await fetch('/api/claim', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: data.code, discordId: data.discordId }),
       });
-      }),
-                                          });
 
-                                                const json = await res.json();
+      const json = await res.json();
 
-                                                      if (!res.ok) {
-                                                              throw new Error(json.error || 'Invalid or already claimed code.');
-                                                                    }
+      if (!res.ok) {
+        throw new Error(json.error || 'Invalid or already claimed code.');
+      }
 
-                                                                          return json as { categoryName: string; code: string };
-                                                                              },
-                                                                                });
-                                                                                }
-
+      return json as { categoryName: string; code: string };
+    },
+  });
+  }
+  
